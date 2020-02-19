@@ -2,13 +2,15 @@
 
 // npm
 const fastify = require('fastify')({
+  trustProxy: true,
   logger: true
 })
 
 // Declare a route
-fastify.get('/:path', function (request, reply) {
+fastify.get('/', function (request, reply) {
   console.log("headers", request.headers)
-  console.log("path", request.params.path)
+  console.log("ip", request.ip)
+  console.log("ips", request.ips)
   console.log("query", JSON.stringify(request.query))
   reply.send("ok")
 })
