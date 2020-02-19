@@ -61,9 +61,9 @@ fastify.after((err) => {
 
 // , reply
 fastify.get('/', async (request) => {
-  if (request.query.to !== process.env.DID) return "ok"
-  if (!request.query.from || !request.query.message) return "ok"
-  if (request.ip !== process.env.PROXY) return "ok"
+  // if (request.query.to !== process.env.DID) return "ok"
+  // if (!request.query.from || !request.query.message) return "ok"
+  // if (request.ip !== process.env.PROXY) return "ok"
   console.log("headers", request.headers)
   console.log("ip", request.ip)
   console.log("ips", request.ips)
