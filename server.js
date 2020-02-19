@@ -6,7 +6,7 @@ const got = require("got")
 const {CookieJar} = require('tough-cookie')
 const fastify = require('fastify')({
   trustProxy: process.env.PROXY,
-  logger: true
+  // logger: true
 })
 
 const cookieJar = new CookieJar()
@@ -63,25 +63,27 @@ fastify.after((err) => {
 fastify.get('/', async (request) => {
   if (request.query.to !== process.env.DID) return "ok"
   if (!request.query.from || !request.query.message) return "ok"
+  // if (request.query.message.indexOf(" ") !== -1) return "ok"
+  if (!/^[A-Z]{4,}$/.test(request.query.message)) return "ok"
   // if (request.ip !== process.env.PROXY) return "ok"
-  console.log("headers", request.headers)
-  console.log("ip", request.ip)
-  console.log("ips", request.ips)
-  console.log("query", JSON.stringify(request.query))
+  // console.log("headers", request.headers)
+  // console.log("ip", request.ip)
+  // console.log("ips", request.ips)
+  // console.log("query", JSON.stringify(request.query))
   // reply.send("ok")
 
   // await login()
   // const resp = await fetchTicker(request.query.message.toUpperCase())
-  const [resp] = await Promise.all([fetchTicker(request.query.message.toUpperCase()), login()])
+  const [resp] = await Promise.all([fetchTicker(request.query.message), login()])
 
-  console.log("RESP", resp)
+  // console.log("RESP", resp)
 
   const contact = request.query.from
   // const msg = "btc test #2 BTCUSDT: 10013.22 (dernier)"
   const msg = `${resp.date}
 ${resp.symbol}: ${resp.price}`
 
-  console.log("MES", msg)
+  // console.log("MES", msg)
   await got.post(u, {
     cookieJar,
     responseType: "json",
