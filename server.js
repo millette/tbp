@@ -41,11 +41,12 @@ const login = () => got.post(u, {
   }
 })
 
-
+/*
 fastify.after((err) => {
   console.log("AFTER", err)
   return login()
 })
+*/
 
 /*
 .then(({headers, body}) => {
@@ -69,13 +70,16 @@ fastify.get('/', async (request) => {
   console.log("query", JSON.stringify(request.query))
   // reply.send("ok")
 
-  const resp = await fetchTicker(request.query.message.toUpperCase())
+  // await login()
+  // const resp = await fetchTicker(request.query.message.toUpperCase())
+  const [resp] = await Promise.all([fetchTicker(request.query.message.toUpperCase()), login()])
 
   const contact = request.query.from
   // const msg = "btc test #2 BTCUSDT: 10013.22 (dernier)"
   const msg = `${resp.date}
 ${resp.symbol}: ${resp.price}`
 
+  console.log("MES", msg)
   await got.post(u, {
     cookieJar,
     responseType: "json",
